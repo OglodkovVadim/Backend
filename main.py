@@ -1,9 +1,10 @@
 from flask import Flask, request, jsonify
 from flask_sqlalchemy import SQLAlchemy
 import requests
+from datetime import datetime
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///example.db'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////home/miet/Backend/source/instance/tasks.db'
 db = SQLAlchemy(app)
 
 
@@ -118,22 +119,22 @@ def user_task(taskId):
 @app.route('/user-task', methods=['POST'])
 def create_user_task():
     try:
-        response = requests.get('http://users.local/users',
-                                headers={
-                                    'Authorization':
-                                    request.headers['Authorization']
-                                    })
-        if response.status_code == 200:
+        # response = requests.get('http://users.local/users',
+        #                         headers={
+        #                             'Authorization':
+        #                             request.headers['Authorization']
+        #                             })
+        if True:
             match request.method:
                 case 'POST':
-                    data = request.json()
+                    data = request.get_json()
                     if data:
                         new_task = UserTask(
                             title=data['title'],
                             description=data['description'],
                             status=data['status'],
                             user_id=data['user_id'],
-                            deadline=data['deadline']
+                            deadline=datetime.strptime(data['deadline'], '%Y-%m-%d %H:%M:%S')
                         )
                         db.session.add(new_task)
                         db.session.commit()
@@ -150,10 +151,10 @@ def create_user_task():
                             'code': 400, 'message': 'Bad Request'
                             }]}), 400
 
-        elif response.status_code == 404:
-            return jsonify({'errors': [{
-                "code": 401, 'message': "Unauthorized"
-                }]}), 401
+        # elif response.status_code == 404:
+            # return jsonify({'errors': [{
+                # "code": 401, 'message': "Unauthorized"
+                # }]}), 401
         else:
             return jsonify({'errors': [{
                 "code": 500, 'message': "Server Error"
@@ -166,7 +167,7 @@ def create_user_task():
             }]}), 500
 
 
-@app.route('/user-task', methods=['POST'])
+@app.route('/user-task/status/<int:taskId>', methods=['POST'])
 def get_user_tasks(taskId):
     try:
         response = requests.get('http://users.local/users',
@@ -193,50 +194,6 @@ def get_user_tasks(taskId):
                                     item.deadline.strftime('%Y-%m-%d %H:%M:%S')
                             })
                         return jsonify(user_task_data)
-                    else:
-                        return jsonify({'errors': [{
-                            'code': 404, 'message': "Not Found"
-                            }]}), 404
-
-        elif response.status_code == 404:
-            return jsonify({'errors': [{
-                "code": 401, 'message': "Unauthorized"
-                }]}), 401
-        else:
-            return jsonify({'errors': [{
-                "code": 500, 'message': "Server Error"
-                }]}), 500
-
-    except Exception as e:
-        print(f'Error: {e}')
-        return jsonify({'errors': [{
-            'code': 500, 'message': "Server Error"
-            }]}), 500
-
-
-@app.route('/user-task/status/<int:taskId>', methods=['PATCH'])
-def update_status_user_task(taskId):
-    try:
-        response = requests.get('http://users.local/users',
-                                headers={
-                                    'Authorization':
-                                    request.headers['Authorization']
-                                    })
-        if response.status_code == 200:
-            match request.method:
-                case 'PATCH':
-                    task = UserTask.query.get(taskId)
-                    if task:
-                        task.status = int(request.json()['status'])
-                        return jsonify({
-                            'id': task.id,
-                            'title': task.title,
-                            'description': task.description,
-                            'status': task.status,
-                            'user_id': task.user_id,
-                            'deadline':
-                            task.deadline.strftime('%Y-%m-%d %H:%M:%S')
-                        }), 200
                     else:
                         return jsonify({'errors': [{
                             'code': 404, 'message': "Not Found"
