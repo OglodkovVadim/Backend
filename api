@@ -1,0 +1,1476 @@
+openapi: 3.0.0
+info:
+  title: Task Manager API
+  description: |
+    Task manager API that allows to users work with  tasks and groups that contain tasks.
+    
+    Shishkin S. O., Oglodkov V. V. PIN-36
+  version: "1.0.0"
+tags:
+  - name: user-tasks
+    description: Operations for user tasks
+  - name: group-tasks
+    description: Operations for group tasks
+  - name: user-subtasks
+    description: Operations for user tasks
+  - name: group-subtasks
+    description: Operations for group tasks
+paths:
+  '/user-tasks/{taskId}':
+    get:
+      tags:
+        - user-tasks
+      summary: Get a task
+      operationId: returnTask
+      parameters:
+        - name: taskId
+          in: path
+          description: ID of task to return
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          $ref: '#/components/responses/return_user-tasks'
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error400"
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error401"
+        "403":
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error403"
+        "404":
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error404"
+        "500":
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error500"
+    patch:
+      tags:
+        - user-tasks
+      summary: Update a task
+      operationId: updateTask
+      parameters:
+        - name: taskId
+          in: path
+          description: ID of task to return
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          $ref: '#/components/responses/return_user-tasks'
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error400"
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error401"
+        "403":
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error403"
+        "404":
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error404"
+        "500":
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error500"
+      requestBody:
+        $ref: '#/components/requestBodies/request_user-task_update'
+      security:
+        - bearer_auth: []
+    delete:
+      tags: 
+        - user-tasks
+      summary: Delete a task
+      operationId: deleteTask
+      parameters:
+        - name: taskId
+          in: path
+          description: ID of task to update
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Task deleted
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error400"
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error401"
+        "403":
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error403"
+        "404":
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error404"
+        "500":
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error500"
+      security:
+        - bearer_auth: []
+  '/user-tasks':
+    post:
+      tags:
+        - user-tasks
+      summary: Create a task
+      operationId: createTask
+      responses:
+        '200':
+          $ref: '#/components/responses/return_user-tasks'
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error400"
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error401"
+        "403":
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error403"
+        "404":
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error404"
+        "500":
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error500"
+      requestBody:
+        $ref: '#/components/requestBodies/request_user-task'
+      security:
+        - bearer_auth: []
+  '/user-tasks/status/{taskId}':
+    patch:
+      tags:
+        - user-tasks
+      summary: Update the status of a task
+      operationId: updateTaskStatus
+      parameters:
+        - name: taskId
+          in: path
+          description: ID of task to update
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          $ref: '#/components/responses/return_user-tasks'
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error400"
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error401"
+        "403":
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error403"
+        "404":
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error404"
+        "500":
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error500"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                status:
+                  type: integer
+                  format: int32
+                  minimum: 0
+                  maximum: 2
+      security:
+        - bearer_auth: []
+        
+  '/group-tasks/{taskId}':
+    get:
+      tags:
+        - group-tasks
+      summary: Get a task
+      operationId: returnGroupTask
+      parameters:
+        - name: taskId
+          in: path
+          description: ID of task to return
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          $ref: '#/components/responses/return_group-tasks'
+    patch:
+      tags:
+        - group-tasks
+      summary: Update a task
+      operationId: updateTask
+      parameters:
+        - name: taskId
+          in: path
+          description: ID of task to return
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          $ref: '#/components/responses/return_group-tasks'
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error400"
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error401"
+        "403":
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error403"
+        "404":
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error404"
+        "500":
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error500"
+      requestBody:
+        $ref: '#/components/requestBodies/request_group-task_update'
+      security:
+        - bearer_auth: []
+    delete:
+      tags: 
+        - group-tasks
+      summary: Delete a task
+      operationId: deleteGroupTask
+      parameters:
+        - name: taskId
+          in: path
+          description: ID of task to update
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Task deleted
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error400"
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error401"
+        "403":
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error403"
+        "404":
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error404"
+        "500":
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error500"
+      security:
+        - bearer_auth: []
+  '/group-tasks':
+    post:
+      tags:
+        - group-tasks
+      summary: Create a task
+      operationId: createGroupTask
+      responses:
+        '200':
+          $ref: '#/components/responses/return_group-tasks'
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error400"
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error401"
+        "403":
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error403"
+        "404":
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error404"
+        "500":
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error500"
+      requestBody:
+        $ref: '#/components/requestBodies/request_group-task'
+      security:
+        - bearer_auth: []
+  '/group-tasks/status/{taskId}':
+    patch:
+      tags:
+        - group-tasks
+      summary: Update the status of a task
+      operationId: updateTaskStatus
+      parameters:
+        - name: taskId
+          in: path
+          description: ID of task to update
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          $ref: '#/components/responses/return_group-tasks'
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error400"
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error401"
+        "403":
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error403"
+        "404":
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error404"
+        "500":
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error500"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                status:
+                  type: integer
+                  format: int32
+                  minimum: 0
+                  maximum: 2
+      security:
+        - bearer_auth: []
+        
+  '/user-subtasks/{taskId}':
+    get:
+      tags:
+        - user-subtasks
+      summary: Get a subtask
+      operationId: returnUserSubtask
+      parameters:
+        - name: taskId
+          in: path
+          description: ID of subtask to return
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          $ref: '#/components/responses/return_user-subtask'
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error400"
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error401"
+        "403":
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error403"
+        "404":
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error404"
+        "500":
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error500"
+    patch:
+      tags:
+        - user-subtasks
+      summary: Update a subtask
+      operationId: updateSubtask
+      parameters:
+        - name: taskId
+          in: path
+          description: ID of subtask to return
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          $ref: '#/components/responses/return_user-subtask'
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error400"
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error401"
+        "403":
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error403"
+        "404":
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error404"
+        "500":
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error500"
+      requestBody:
+        $ref: '#/components/requestBodies/request_user-subtask_update'
+      security:
+        - bearer_auth: []
+    delete:
+      tags: 
+        - user-subtasks
+      summary: Delete a subtask
+      operationId: deleteUserSubtask
+      parameters:
+        - name: taskId
+          in: path
+          description: ID of subtask to update
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Subtask deleted
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error400"
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error401"
+        "403":
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error403"
+        "404":
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error404"
+        "500":
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error500"
+      security:
+        - bearer_auth: []
+
+  '/user-subtasks':
+    post:
+      tags:
+        - user-tasks
+      summary: Create a subtask
+      operationId: createUserSubtask
+      responses:
+        '200':
+          $ref: '#/components/responses/return_user-subtask'
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error400"
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error401"
+        "403":
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error403"
+        "404":
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error404"
+        "500":
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error500"
+      requestBody:
+        $ref: '#/components/requestBodies/request_user-subtask'
+      security:
+        - bearer_auth: []
+  '/user-subtasks/status/{taskId}':
+    patch:
+      tags:
+        - user-subtasks
+      summary: Update the status of a subtask
+      operationId: updateSubtaskStatus
+      parameters:
+        - name: taskId
+          in: path
+          description: ID of subtask to update
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          $ref: '#/components/responses/return_user-subtask'
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error400"
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error401"
+        "403":
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error403"
+        "404":
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error404"
+        "500":
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error500"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                status:
+                  type: integer
+                  format: int32
+                  minimum: 0
+                  maximum: 2
+      security:
+        - bearer_auth: []
+        
+        
+  '/group-subtasks/{taskId}':
+    get:
+      tags:
+        - group-subtasks
+      summary: Get a subtask
+      operationId: returnGroupSubtask
+      parameters:
+        - name: taskId
+          in: path
+          description: ID of subtask to return
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          $ref: '#/components/responses/return_group-subtask'
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error400"
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error401"
+        "403":
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error403"
+        "404":
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error404"
+        "500":
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error500"
+    patch:
+      tags:
+        - group-subtasks
+      summary: Update a subtask
+      operationId: updateSubtask
+      parameters:
+        - name: taskId
+          in: path
+          description: ID of subtask to return
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          $ref: '#/components/responses/return_user-subtask'
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error400"
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error401"
+        "403":
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error403"
+        "404":
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error404"
+        "500":
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error500"
+      requestBody:
+        $ref: '#/components/requestBodies/request_group-subtask_update'
+      security:
+        - bearer_auth: []
+    delete:
+      tags: 
+        - group-subtasks
+      summary: Delete a subtask
+      operationId: deleteGroupSubtask
+      parameters:
+        - name: taskId
+          in: path
+          description: ID of subtask to update
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Subtask deleted
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error400"
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error401"
+        "403":
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error403"
+        "404":
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error404"
+        "500":
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error500"
+      security:
+        - bearer_auth: []
+
+  '/group-subtasks':
+    post:
+      tags:
+        - group-tasks
+      summary: Create a subtask
+      operationId: createGroupSubtask
+      responses:
+        '200':
+          $ref: '#/components/responses/return_group-subtask'
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error400"
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error401"
+        "403":
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error403"
+        "404":
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error404"
+        "500":
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error500"
+      requestBody:
+        $ref: '#/components/requestBodies/request_group-subtask'
+      security:
+        - bearer_auth: []
+  '/group-subtasks/status/{taskId}':
+    patch:
+      tags:
+        - group-subtasks
+      summary: Update the status of a subtask
+      operationId: updateSubtaskStatus
+      parameters:
+        - name: taskId
+          in: path
+          description: ID of subtask to update
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          $ref: '#/components/responses/return_group-subtask'
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error400"
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error401"
+        "403":
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error403"
+        "404":
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error404"
+        "500":
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error500"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                status:
+                  type: integer
+                  format: int32
+                  minimum: 0
+                  maximum: 2
+      security:
+        - bearer_auth: []
+        
+components:
+  schemas:
+    User-Task:
+      type: object
+      required:
+        - id
+        - title
+        - description
+        - user_id
+        - status
+        - deadline
+      properties:
+        id:
+          type: number
+        title:
+          type: string
+          minLength: 1
+          maxLength: 50
+        description:
+          type: string
+          minLength: 1
+          maxLength: 500
+        user_id:
+          type: integer
+          minLength: 1
+          maxLength: 50
+        status:
+          type: boolean
+        deadline:
+          type: string
+          format: date-time
+          pattern: /([0-9]{4})-(?:[0-9]{2})-([0-9]{2})/
+      
+    Group-Task:
+      type: object
+      required:
+        - id
+        - title
+        - description
+        - status
+        - executor
+        - deadline
+        - group_id
+      properties:
+        id:
+          type: number
+        title:
+          type: string
+          minLength: 1
+          maxLength: 50
+        description:
+          type: string
+          minLength: 1
+          maxLength: 500
+        status:
+          type: boolean
+        executor:
+          type: integer
+          minLength: 1
+          maxLength: 50
+        deadline:
+          type: string
+          format: date-time
+          pattern: /([0-9]{4})-(?:[0-9]{2})-([0-9]{2})/
+        group_id:
+          type: integer
+          minLength: 1
+          maxLength: 50
+          
+          
+    User-Subtask:
+      type: object
+      required:
+        - id
+        - title
+        - status
+        - task_id
+      properties:
+        id:
+          type: number
+        title:
+          type: string
+          minLength: 1
+          maxLength: 50
+        status:
+          type: boolean
+        task_id:
+          type: integer
+          minLength: 1
+          maxLength: 50
+      
+    Group-Subtask:
+      type: object
+      required:
+        - id
+        - title
+        - status
+        - executor
+        - group_id
+      properties:
+        id:
+          type: number
+        title:
+          type: string
+          minLength: 1
+          maxLength: 50
+        status:
+          type: boolean
+        executor:
+          type: integer
+          minLength: 1
+          maxLength: 50
+        group_id:
+          type: string
+          minLength: 36
+          maxLength: 36
+          
+    Error:
+      type: object
+      required:
+        - code
+        - message
+      properties:
+        code:
+          type: string
+          description: Error status code
+          enum:
+            - "400"
+            - "401"
+            - "403"
+            - "404"
+            - "500"
+            - "418"
+        message:
+          type: string
+          description: Error message
+          example: Error discription
+        meta:
+          type: object
+          description: Meta data for the error
+          properties:
+            additionalInfo:
+              type: string
+              description: Additional information about the error
+    Error400:
+      type: object
+      properties:
+        errors:
+          type: array
+          items:
+            $ref: "#/components/schemas/Error"
+      example:
+        errors:
+          - code: "400"
+            message: Bad Request
+            meta:
+              additional_info: Additional information about the error
+
+    Error401:
+      type: object
+      properties:
+        errors:
+          type: array
+          items:
+            $ref: "#/components/schemas/Error"
+      example:
+        errors:
+          - code: "401"
+            message: Unauthorized
+            meta:
+              additional_info: Additional information about the error
+
+    Error403:
+      type: object
+      properties:
+        errors:
+          type: array
+          items:
+            $ref: "#/components/schemas/Error"
+      example:
+        errors:
+          - code: "403"
+            message: Forbidden
+            meta:
+              additional_info: Additional information about the error
+
+    Error404:
+      type: object
+      properties:
+        errors:
+          type: array
+          items:
+            $ref: "#/components/schemas/Error"
+      example:
+        errors:
+          - code: "404"
+            message: Not Found
+            meta:
+              additional_info: Additional information about the error
+
+    Error500:
+      type: object
+      properties:
+        errors:
+          type: array
+          items:
+            $ref: "#/components/schemas/Error"
+      example:
+        errors:
+          - code: "500"
+            message: Internal Server Error
+            meta:
+              additional_info: Additional information about the error
+        
+  responses:
+    return_user-tasks:
+      description: Successful operation
+      content:
+        application/json:
+          schema:
+            properties:
+                data:
+                  $ref: '#/components/schemas/User-Task'
+    return_group-tasks:
+      description: Successful operation
+      content:
+        application/json:
+          schema:
+            properties:
+                data:
+                  $ref: '#/components/schemas/Group-Task'
+                  
+    return_user-subtasks:
+      description: Successful operation
+      content:
+        application/json:
+          schema:
+            properties:
+                data:
+                  $ref: '#/components/schemas/User-Subtask'
+                  
+    return_group-subtasks:
+      description: Successful operation
+      content:
+        application/json:
+          schema:
+            properties:
+                data:
+                  $ref: '#/components/schemas/Group-Subtask'
+                  
+
+    return_user-subtask:
+      description: Successful operation
+      content:
+        application/json:
+          schema:
+            properties:
+                data:
+                  $ref: '#/components/schemas/User-Subtask'
+    return_group-subtask:
+      description: Successful operation
+      content:
+        application/json:
+          schema:
+            properties:
+                data:
+                  $ref: '#/components/schemas/Group-Subtask'
+
+   
+
+    
+  requestBodies:
+    request_user-task:
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              title:
+                description: Title for the task
+                type: string
+                minLength: 1
+                maxLength: 50
+              description:
+                description: Description for the task
+                type: string
+                minLength: 1
+                maxLength: 500
+              user_id: 
+                description: User who work with this task
+                type: number
+              deadline:
+                description: Deadline for the task
+                type: string
+                format: date-time
+                pattern: /([0-9]{4})-(?:[0-9]{2})-([0-9]{2})/
+              status:
+                type: integer
+                format: int32
+          
+      required: true
+    request_user-task_update:
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              title:
+                description: Title for the task
+                type: string
+                minLength: 1
+                maxLength: 50
+              description:
+                description: Description for the task
+                type: string
+                minLength: 1
+                maxLength: 500
+              deadline:
+                description: Deadline for the task
+                type: string
+                format: date-time
+                pattern: /([0-9]{4})-(?:[0-9]{2})-([0-9]{2})/
+      required: true
+      
+    request_user-subtask:
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              title:
+                description: Title for the subtask
+                type: string
+                minLength: 1
+                maxLength: 50
+              description:
+                description: Description for the subtask
+                type: string
+                minLength: 1
+                maxLength: 500
+              user_id: 
+                description: User who work with this subtask
+                type: number
+              deadline:
+                description: Deadline for the subtask
+                type: string
+                format: date-time
+                pattern: /([0-9]{4})-(?:[0-9]{2})-([0-9]{2})/
+              status:
+                type: integer
+                format: int32
+          
+      required: true
+    request_user-subtask_update:
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              title:
+                description: Title for the subtask
+                type: string
+                minLength: 1
+                maxLength: 50
+              description:
+                description: Description for the subtask
+                type: string
+                minLength: 1
+                maxLength: 500
+              deadline:
+                description: Deadline for the subtask
+                type: string
+                format: date-time
+                pattern: /([0-9]{4})-(?:[0-9]{2})-([0-9]{2})/
+      required: true
+    request_group-task:
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              title:
+                description: Title for the task
+                type: string
+                minLength: 1
+                maxLength: 50
+              description:
+                description: Description for the task
+                type: string
+                minLength: 1
+                maxLength: 500
+              user_id: 
+                description: User who work with this task
+                type: number
+              deadline:
+                description: Deadline for the task
+                type: string
+                format: date-time
+                pattern: /([0-9]{4})-(?:[0-9]{2})-([0-9]{2})/
+              executor:
+                type: string
+                minLength: 36
+                maxLength: 36
+                
+              status:
+                type: integer
+                format: int32
+          
+      required: true
+    request_group-task_update:
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              title:
+                description: Title for the task
+                type: string
+                minLength: 1
+                maxLength: 50
+              description:
+                description: Description for the task
+                type: string
+                minLength: 1
+                maxLength: 500
+              executor:
+                type: string
+                minLength: 36
+                maxLength: 36
+              deadline:
+                description: Deadline for the task
+                type: string
+                format: date-time
+                pattern: /([0-9]{4})-(?:[0-9]{2})-([0-9]{2})/
+      required: true
+
+    request_group-subtask:
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              title:
+                description: Title for the subtask
+                type: string
+                minLength: 1
+                maxLength: 50
+              description:
+                description: Description for the subtask
+                type: string
+                minLength: 1
+                maxLength: 500
+              user_id: 
+                description: User who work with this subtask
+                type: number
+              deadline:
+                description: Deadline for the subtask
+                type: string
+                format: date-time
+                pattern: /([0-9]{4})-(?:[0-9]{2})-([0-9]{2})/
+              executor:
+                type: string
+                minLength: 36
+                maxLength: 36
+                
+              status:
+                type: integer
+                format: int32
+          
+      required: true
+    request_group-subtask_update:
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              title:
+                description: Title for the subtask
+                type: string
+                minLength: 1
+                maxLength: 50
+              description:
+                description: Description for the subtask
+                type: string
+                minLength: 1
+                maxLength: 500
+              executor:
+                type: string
+                minLength: 36
+                maxLength: 36
+              deadline:
+                description: Deadline for the subtask
+                type: string
+                format: date-time
+                pattern: /([0-9]{4})-(?:[0-9]{2})-([0-9]{2})/
+      required: true
+  securitySchemes:
+    bearer_auth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+servers:
+  # Added by API Auto Mocking Plugin
+  - description: Swagger API Task-manager
+    url: https://task-manangerr/v1/
