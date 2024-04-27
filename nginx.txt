@@ -1,0 +1,37 @@
+etc/hosts/
+127.0.0.1	tasks.local
+127.0.0.1	users.local
+
+
+-------------------------------------------
+/etc/nginx/sites-available
+users
+	server {
+		listen 80;
+		server_name users.local www.users.local;
+
+		location /  {
+			proxy_pass http://localhost:3000;
+		}
+	}
+
+
+tasks
+	server {
+		listen 80;
+		server_name tasks.local www.tasks.local;
+
+		location /  {
+			proxy_pass http://localhost:5000;			
+		}	
+	}
+
+
+-------------------------------------------
+/etc/nginx/sites-enabled
+sudo ln -s /etc/nginx/sites-available/users /etc/nginx/sites-enabled
+sudo ln -s /etc/nginx/sites-available/tasks /etc/nginx/sites-enabled
+
+
+--------------------------------------------
+sudo systemctl restart nginx
